@@ -21,6 +21,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 import CursorGlow from "../components/CursorGlow";
+import NFTGallery from "../components/NFTGallery";
 
 export default function Home() {
   const { address, chain } = useAccount();
@@ -164,7 +165,7 @@ export default function Home() {
     }
   };
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
+    <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
       <CursorGlow />
       {/* Decorative Background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -231,7 +232,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="bg-white/5 backdrop-blur-sm p-8 rounded-2xl shadow-xl w-full">
+        <div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full">
           <Wallet>
             <ConnectWallet>
               <Avatar className="h-6 w-6" />
@@ -378,6 +379,18 @@ export default function Home() {
               <div className="text-red-500 text-center mt-4">{uploadError}</div>
             )}
           </div>
+        </div>
+        {/* NFT Gallery */}
+        <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl shadow-xl w-full mx-0 mt-8">
+          <div className="flex items-center">
+            <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+              🎨
+            </h2>
+            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-400 mb-4 flex items-center">
+              <span className="ml-2">NFT Gallery</span>
+            </h2>
+          </div>
+          <NFTGallery />
         </div>
       </main>
     </div>

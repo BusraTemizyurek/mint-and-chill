@@ -24,10 +24,12 @@ import CursorGlow from "../components/CursorGlow";
 import NFTGallery from "../components/NFTGallery";
 import { Background } from "../components/background";
 import { Header } from "../components/header";
+import { useContract } from "./useContract";
 
 export default function Home() {
   const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
+  const contract = useContract();
   // Add state for file upload
   const [file, setFile] = useState<File | null>(null);
   const [imagePreview, setImagePreview] = useState<string | null>(null);
@@ -131,25 +133,11 @@ export default function Home() {
       )}`;
       console.log("TokenURI:", tokenURI);
 
-      //setup provider and contract
-      const network = {
-        chainId: chain.id,
-        name: chain.name || "Sepolia",
-        ensAddress: chain.contracts?.ensRegistry?.address,
-      };
-      const provider = new ethers.BrowserProvider(
-        walletClient.transport,
-        network
-      );
-      const signer = await provider.getSigner(address);
-      const contract = new ethers.Contract(
-        "0xC1Cb5735170ef11A858F1A35b808cF7A2778B2f6",
-        output.abi,
-        signer
-      );
-
+      if (!contract) {
+        throw new Error("Contract not found");
+      }
       // Mint NFT with the IPFS URL
-      const transaction = await contract.mintNFT(signer.getAddress(), tokenURI);
+      const transaction = await contract.mintNFT(address, tokenURI);
       const receipt = await transaction.wait();
 
       console.log("Transaction:", receipt);

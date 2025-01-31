@@ -56,3 +56,6 @@ Thumbs.db
 .yarn-integrity 
 
 **/.next
+
+/smart-contract/cache
+/smart-contract/artifacts

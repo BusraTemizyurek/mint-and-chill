@@ -1,14 +1,14 @@
 # Dependencies
-/node_modules
-/.pnp
+**/node_modules
+**/.pnp
 .pnp.js
 
 # Testing
-/coverage
+**/coverage
 
 # Production
-/build
-/dist
+**/build
+**/dist
 
 # Environment files
 .env
@@ -55,4 +55,4 @@ Thumbs.db
 # Yarn Integrity file
 .yarn-integrity 
 
-/.next
+**/.next

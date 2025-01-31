@@ -18,10 +18,12 @@ import {
   Address,
   EthBalance,
 } from "@coinbase/onchainkit/identity";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import CursorGlow from "../components/CursorGlow";
 import NFTGallery from "../components/NFTGallery";
+import { Background } from "../components/background";
+import { Header } from "../components/header";
 
 export default function Home() {
   const { address, chain } = useAccount();
@@ -40,6 +42,8 @@ export default function Home() {
     "idle"
   );
   const [transactionHash, setTransactionHash] = useState<string | null>(null);
+
+  const [hasNFTs, setHasNFTs] = useState<boolean>(false);
 
   const uploadToPinata = async (file: File) => {
     const formData = new FormData();
@@ -65,6 +69,9 @@ export default function Home() {
     }
   };
 
+  useEffect(() => {
+    setHasNFTs(true);
+  }, []);
   // Handle file selection
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -167,72 +174,12 @@ export default function Home() {
   return (
     <div className="grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)]">
       <CursorGlow />
-      {/* Decorative Background */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <svg
-          className="absolute left-[max(50%,25rem)] top-0 h-[64rem] w-[128rem] -translate-x-1/2 stroke-blue-500/20 [mask-image:radial-gradient(64rem_64rem_at_top,white,transparent)]"
-          aria-hidden="true"
-        >
-          <defs>
-            <pattern
-              id="e813992c-7d03-4cc4-a2bd-151760b470a0"
-              width="200"
-              height="200"
-              x="50%"
-              y="-1"
-              patternUnits="userSpaceOnUse"
-            >
-              <path d="M100 200V.5M.5 .5H200" fill="none" />
-            </pattern>
-          </defs>
-          <rect
-            width="100%"
-            height="100%"
-            strokeWidth="0"
-            fill="url(#e813992c-7d03-4cc4-a2bd-151760b470a0)"
-          />
-        </svg>
-      </div>
-
-      {/* Gradient Orbs */}
-      <div className="absolute top-0 -z-10 h-full w-full">
-        <div className="absolute top-0 left-0 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500 opacity-20 blur-3xl"></div>
-        <div className="absolute bottom-0 right-0 h-96 w-96 translate-x-1/2 translate-y-1/2 rounded-full bg-blue-500 opacity-20 blur-3xl"></div>
-      </div>
-
+      <Background />
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start max-w-2xl w-full">
-        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-500">
-          Sepolia Testnet
-        </h2>
-
-        {/* Updated header with stylized branding */}
-        <div className="flex items-center gap-6">
-          <Image
-            src="/logo.svg"
-            alt="Mint and Chill Logo"
-            width={50}
-            height={50}
-            className="rounded-lg"
-          />
-          <div className="flex flex-col">
-            <h1 className="text-5xl font-extrabold tracking-tight">
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-blue-600">
-                MINT
-              </span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-blue-400 mx-2">
-                &
-              </span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-purple-600">
-                CHILL
-              </span>
-            </h1>
-            <span className="text-sm text-gray-400 tracking-widest uppercase mt-1">
-              NFT Minting Made Easy
-            </span>
-          </div>
-        </div>
+        {/* minter */}
 
         <div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full">
+          <Header />
           <Wallet>
             <ConnectWallet>
               <Avatar className="h-6 w-6" />
@@ -381,17 +328,7 @@ export default function Home() {
           </div>
         </div>
         {/* NFT Gallery */}
-        <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl shadow-xl w-full mx-0 mt-8">
-          <div className="flex items-center">
-            <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center">
-              🎨
-            </h2>
-            <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-400 mb-4 flex items-center">
-              <span className="ml-2">NFT Gallery</span>
-            </h2>
-          </div>
-          <NFTGallery />
-        </div>
+        {hasNFTs ? <NFTGallery /> : null}
       </main>
     </div>
   );

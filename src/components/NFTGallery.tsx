@@ -40,21 +40,31 @@ const exampleNFTs = [
 
 export default function NFTGallery() {
   return (
-    <div className="grid grid-cols-2 gap-4">
-      {exampleNFTs.map((nft) => (
-        <NFTCard
-          key={nft.id}
-          contractAddress={nft.contractAddress}
-          tokenId={nft.tokenId}
-        >
-          <NFTMedia />
-          <NFTTitle />
-          <NFTOwner />
-          <NFTLastSoldPrice />
-          <NFTNetwork />
-          {/* You can customize the components rendered inside the NFTCard here */}
-        </NFTCard>
-      ))}
+    <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl shadow-xl w-full mx-0 mt-8">
+      <div className="flex items-center">
+        <h2 className="text-3xl font-bold text-gray-800 mb-4 flex items-center">
+          🎨
+        </h2>
+        <h2 className="text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-blue-400 mb-4 flex items-center">
+          <span className="ml-2">NFT Gallery</span>
+        </h2>
+      </div>
+      <div className="grid grid-cols-2 gap-4">
+        {exampleNFTs.map((nft) => (
+          <NFTCard
+            key={nft.id}
+            contractAddress={nft.contractAddress}
+            tokenId={nft.tokenId}
+          >
+            <NFTMedia />
+            <NFTTitle />
+            <NFTOwner />
+            <NFTLastSoldPrice />
+            <NFTNetwork />
+            {/* You can customize the components rendered inside the NFTCard here */}
+          </NFTCard>
+        ))}
+      </div>
     </div>
   );
 }

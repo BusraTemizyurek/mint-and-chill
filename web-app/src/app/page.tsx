@@ -13,10 +13,12 @@ import { WalletButton } from "@/components/wallet-button";
 
 export default function Home() {
   const { address, chain } = useAccount();
-  const [isSupportedNetwork, setIsSupportedNetwork] = useState<boolean>(false);
+  const [network, setNetwork] = useState<
+    "loading" | "not-supported" | "supported"
+  >("loading");
 
   useEffect(() => {
-    setIsSupportedNetwork(chain?.id === baseSepolia.id);
+    setNetwork(chain?.id === baseSepolia.id ? "supported" : "not-supported");
   }, [chain]);
 
   const scrollToGallery = () => {
@@ -41,8 +43,8 @@ export default function Home() {
           <div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full">
             <Header />
             <WalletButton />
-            {isSupportedNetwork && <Minter />}
-            {!isSupportedNetwork && (
+            {network == "supported" && <Minter />}
+            {network == "not-supported" && (
               <ErrorMessage
                 title="Unsupported network"
                 message={`This network is not supported. Please switch to Base Sepolia in your wallet.`}
@@ -51,7 +53,7 @@ export default function Home() {
           </div>
         </div>
         {/* NFT Gallery */}
-        {isSupportedNetwork && address && scrollToGallery() && (
+        {network == "supported" && address && scrollToGallery() && (
           <>
             <NFTGallery />
             <button

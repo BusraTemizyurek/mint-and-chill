@@ -1,6 +1,6 @@
 import { useContract } from "../app/use-contract";
 import { useAccount, useWalletClient } from "wagmi";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { MinterInputs } from "./minter-inputs";
 import { MintNFTButton } from "./mint-nft-button";
@@ -8,7 +8,11 @@ import { MintSuccessErrorMsg } from "./mint-success-msg";
 import { ErrorMessage } from "./error-message";
 import { NFTMetadata } from "@/types/nft-metadata";
 
-export const Minter = () => {
+type MinterProps = {
+  onMintSuccess: (transactionHash: string) => void;
+};
+
+export const Minter = ({ onMintSuccess }: MinterProps) => {
   const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
   const contract = useContract();
@@ -123,6 +127,7 @@ export const Minter = () => {
       console.log("Transaction:", receipt);
       setTransactionHash(receipt.hash);
       setMintStatus("success");
+      onMintSuccess(receipt.hash);
 
       // Clear form
       setFile(null);
@@ -139,6 +144,16 @@ export const Minter = () => {
       setIsUploading(false);
     }
   };
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (mintStatus === "success") {
+      timer = setTimeout(() => {
+        setMintStatus("idle"); // Reset the mint status after 10 seconds
+      }, 10000); // 10 seconds
+    }
+    return () => clearTimeout(timer); // Cleanup the timer on unmount
+  }, [mintStatus]);
 
   return (
     <div className="flex flex-col gap-6 mt-8">

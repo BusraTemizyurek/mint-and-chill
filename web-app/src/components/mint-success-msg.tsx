@@ -14,7 +14,7 @@ export const MintSuccessErrorMsg = ({
         rel="noopener noreferrer"
         className="text-blue-400 hover:text-blue-300 underline"
       >
-        View transaction on Etherscan
+        View the transaction
       </a>
     </div>
   );

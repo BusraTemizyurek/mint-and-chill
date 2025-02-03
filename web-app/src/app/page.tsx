@@ -1,20 +1,21 @@
 "use client";
 
 import { useAccount } from "wagmi";
+import { useState } from "react";
 import CursorGlow from "../components/cursor-glow";
 import NFTGallery from "../components/nft-gallery";
 import { Background } from "../components/background";
 import { Minter } from "../components/minter";
 import { ErrorMessage } from "@/components/error-message";
 import { Header } from "@/components/header";
-import { WalletButton } from "@/components/wallet-button";
+import { WalletDefault } from "@coinbase/onchainkit/wallet";
 
 export default function Home() {
   const { address, chain, isConnected } = useAccount();
+  const [transactions, setTransactions] = useState<string[]>([]);
 
-  const scrollToGallery = () => {
-    window.scrollTo({ top: 200, behavior: "smooth" });
-    return true;
+  const addTransaction = (transactionHash: string) => {
+    setTransactions((prev) => [...prev, transactionHash]);
   };
 
   return (
@@ -33,8 +34,8 @@ export default function Home() {
         <div className={address ? "" : "flex-1 flex items-center"}>
           <div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full">
             <Header />
-            <WalletButton />
-            {isConnected && chain && <Minter />}
+            <WalletDefault />
+            {isConnected && chain && <Minter onMintSuccess={addTransaction} />}
             {isConnected && !chain && (
               <ErrorMessage
                 title="Unsupported network"
@@ -44,9 +45,9 @@ export default function Home() {
           </div>
         </div>
         {/* NFT Gallery */}
-        {isConnected && chain && address && scrollToGallery() && (
+        {isConnected && chain && address && (
           <>
-            <NFTGallery />
+            <NFTGallery transactions={transactions} />
             <button
               onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
               className="fixed bottom-8 right-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 transition-all"

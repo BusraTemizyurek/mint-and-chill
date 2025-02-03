@@ -7,16 +7,20 @@ import { useAccount } from "wagmi";
 import { CONTRACT_ADDRESS } from "@/constants";
 import { useNFTData } from "@/hooks/use-nft-data";
 
-export default function NFTGallery() {
+type NFTGalleryProps = {
+  transactions: string[];
+};
+
+export default function NFTGallery({ transactions }: NFTGalleryProps) {
+  const [nftTokenIds, setNftTokenIds] = useState<string[]>([]);
   const { address } = useAccount();
   const contract = useContract();
-  const [nftTokenIds, setNftTokenIds] = useState<string[]>([]);
 
   useEffect(() => {
     contract?.tokensOfOwner(address).then((tokenIds) => {
       setNftTokenIds(tokenIds.map((id: bigint) => id.toString()));
     });
-  }, [contract, address]);
+  }, [contract, address, transactions]);
 
   return (
     <div className="bg-white/5 backdrop-blur-sm p-6 rounded-2xl shadow-xl w-full mx-0">
@@ -29,12 +33,14 @@ export default function NFTGallery() {
         </h2>
       </div>
       {nftTokenIds.length === 0 ? (
-        "No NFT"
+        <div className="text-xl font-semibold text-gray-600 text-center mt-4">
+          No NFTs available
+        </div>
       ) : (
         <div className="grid grid-cols-[repeat(auto-fill,minmax(270px,1fr))] gap-4 w-full">
-          {nftTokenIds.map((tokenId) => (
+          {nftTokenIds.map((tokenId, index) => (
             <NFTCardDefault
-              key={tokenId}
+              key={index}
               tokenId={tokenId}
               contractAddress={CONTRACT_ADDRESS}
               useNFTData={useNFTData}

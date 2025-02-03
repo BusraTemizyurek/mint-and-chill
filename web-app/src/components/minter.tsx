@@ -1,20 +1,14 @@
-import { Header } from "../components/header";
 import { useContract } from "../app/use-contract";
-import { WalletButton } from "@/components/wallet-button";
 import { useAccount, useWalletClient } from "wagmi";
 import { useState } from "react";
 import axios from "axios";
 import { MinterInputs } from "./minter-inputs";
 import { MintNFTButton } from "./mint-nft-button";
 import { MintSuccessErrorMsg } from "./mint-success-msg";
-import { MintErrorMsg } from "./mint-error-msg";
+import { ErrorMessage } from "./error-message";
 import { NFTMetadata } from "@/types/nft-metadata";
 
-type MinterProps = {
-  className?: string;
-};
-
-export const Minter = ({ className }: MinterProps) => {
+export const Minter = () => {
   const { address, chain } = useAccount();
   const { data: walletClient } = useWalletClient();
   const contract = useContract();
@@ -147,42 +141,41 @@ export const Minter = ({ className }: MinterProps) => {
   };
 
   return (
-    <div
-      className={`bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full ${className}`}
-    >
-      <Header />
-      <WalletButton />
-      <div className="flex flex-col gap-6 mt-8">
-        <MinterInputs
-          name={name}
-          description={description}
-          imagePreview={imagePreview || ""}
-          isUploading={isUploading}
-          handleFileChange={handleFileChange}
-          setName={setName}
-          setDescription={setDescription}
+    <div className="flex flex-col gap-6 mt-8">
+      <MinterInputs
+        name={name}
+        description={description}
+        imagePreview={imagePreview || ""}
+        isUploading={isUploading}
+        handleFileChange={handleFileChange}
+        setName={setName}
+        setDescription={setDescription}
+      />
+
+      <MintNFTButton
+        mintNFT={mintNFT}
+        isUploading={isUploading}
+        file={file}
+        name={name}
+        description={description}
+      />
+
+      {/* Add success message */}
+      {mintStatus === "success" && transactionHash && (
+        <MintSuccessErrorMsg transactionHash={transactionHash} />
+      )}
+
+      {/* Add error message */}
+      {mintStatus === "error" && uploadError && (
+        <ErrorMessage
+          message={uploadError}
+          title="Failed to mint NFT. Please try again."
         />
+      )}
 
-        <MintNFTButton
-          mintNFT={mintNFT}
-          isUploading={isUploading}
-          file={file}
-          name={name}
-          description={description}
-        />
-
-        {/* Add success message */}
-        {mintStatus === "success" && transactionHash && (
-          <MintSuccessErrorMsg transactionHash={transactionHash} />
-        )}
-
-        {/* Add error message */}
-        {mintStatus === "error" && <MintErrorMsg uploadError={uploadError} />}
-
-        {uploadError && !mintStatus && (
-          <div className="text-red-500 text-center mt-4">{uploadError}</div>
-        )}
-      </div>
+      {uploadError && !mintStatus && (
+        <div className="text-red-500 text-center mt-4">{uploadError}</div>
+      )}
     </div>
   );
 };

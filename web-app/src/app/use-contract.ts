@@ -2,6 +2,7 @@ import { ethers } from "ethers";
 import { useAccount, useWalletClient } from "wagmi";
 import { output } from "../../MintAndChillNFT_metadata.json";
 import { useEffect, useState } from "react";
+import { CONTRACT_ADDRESS } from "@/constants";
 
 export const useContract = () => {
   const { address, chain } = useAccount();
@@ -26,8 +27,7 @@ export const useContract = () => {
     provider.getSigner(address).then((signer) => {
       setContract(
         new ethers.Contract(
-          "0xE9593514f926bd05edc35E4dCA0eD844849dB7e1",
-          // "0xC1Cb5735170ef11A858F1A35b808cF7A2778B2f6",
+          CONTRACT_ADDRESS, // baseSepolia
           output.abi,
           signer
         )

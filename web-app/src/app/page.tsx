@@ -8,32 +8,54 @@ import { Minter } from "../components/minter";
 
 export default function Home() {
   const { address } = useAccount();
+
+  const scrollToGallery = () => {
+    window.scrollTo({ top: 200, behavior: "smooth" });
+    return true;
+  };
+
   return (
-    <div className="flex items-center justify-center min-h-screen p-4 sm:p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)] relative">
+    <div
+      className={`grid items-center justify-items-center min-h-screen p-8 pb-20 gap-16 font-[family-name:var(--font-geist-sans)] ${
+        !address && "h-screen"
+      }`}
+    >
       <CursorGlow />
       <Background />
       <main
-        className={`w-full ${
-          !address
-            ? "flex flex-col items-center max-w-2xl"
-            : "grid grid-cols-1 md:grid-cols-[minmax(400px,600px)_2px_1fr] gap-4 md:gap-8 items-center"
+        className={`flex flex-col gap-8 items-center w-full ${
+          address ? "max-w-full px-4" : "max-w-2xl"
         }`}
       >
         {/* Minter */}
-        <div className="w-full min-w-[350px]">
+        <div className={address ? "" : "flex-1 flex items-center"}>
           <Minter />
         </div>
-
-        {/* Divider - only shown when NFTGallery is present */}
-        {address && (
-          <div className="hidden md:block h-full w-full bg-gray-200/10" />
-        )}
-
         {/* NFT Gallery */}
-        {address && (
-          <div className="w-full overflow-auto">
+        {address && scrollToGallery() && (
+          <>
             <NFTGallery />
-          </div>
+            <button
+              onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+              className="fixed bottom-8 right-8 bg-white/10 hover:bg-white/20 backdrop-blur-sm rounded-full p-3 transition-all"
+              aria-label="Scroll to top"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M5 10l7-7m0 0l7 7m-7-7v18"
+                />
+              </svg>
+            </button>
+          </>
         )}
       </main>
     </div>

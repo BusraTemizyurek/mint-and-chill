@@ -8,6 +8,7 @@ import { MinterInputs } from "./minter-inputs";
 import { MintNFTButton } from "./mint-nft-button";
 import { MintSuccessErrorMsg } from "./mint-success-msg";
 import { MintErrorMsg } from "./mint-error-msg";
+import { NFTMetadata } from "@/types/nft-metadata";
 
 type MinterProps = {
   className?: string;
@@ -106,7 +107,7 @@ export const Minter = ({ className }: MinterProps) => {
       console.log("Uploaded to IPFS:", imageIpfsUrl);
 
       //metadata
-      const metadata = {
+      const metadata: NFTMetadata = {
         name: name,
         description: description,
         image: imageIpfsUrl,

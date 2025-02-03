@@ -1,0 +1,4 @@
+export const CONTRACT_ADDRESS = "0x65869fd0fecb7df77f385b2cfe36026728d8e96d";
+// "0x4aeBdB8F2093e546d053ea608818814d838d07F9"; // baseSepolia;
+// "0xE9593514f926bd05edc35E4dCA0eD844849dB7e1" // sepolia,
+// "0xC1Cb5735170ef11A858F1A35b808cF7A2778B2f6" // sepolia old contract,

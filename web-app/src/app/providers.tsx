@@ -2,7 +2,7 @@
 
 import { useState, type ReactNode } from "react";
 import { OnchainKitProvider } from "@coinbase/onchainkit";
-import { sepolia } from "wagmi/chains";
+import { baseSepolia } from "wagmi/chains";
 import { createConfig, http, WagmiProvider } from "wagmi";
 import { coinbaseWallet } from "wagmi/connectors";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
@@ -11,7 +11,7 @@ export function Providers(props: { children: ReactNode }) {
   const [queryClient] = useState(() => new QueryClient());
 
   const config = createConfig({
-    chains: [sepolia],
+    chains: [baseSepolia],
     connectors: [
       coinbaseWallet({
         appName: "MintAndChill",
@@ -21,15 +21,17 @@ export function Providers(props: { children: ReactNode }) {
     ],
     ssr: true,
     transports: {
-      [sepolia.id]: http(),
+      [baseSepolia.id]: http(),
     },
   });
+  const ONCHAINKIT_API_KEY = process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY;
+
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <OnchainKitProvider
-          apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
-          chain={sepolia}
+          apiKey={ONCHAINKIT_API_KEY}
+          chain={baseSepolia}
           config={{
             appearance: {
               name: "MintAndChill",

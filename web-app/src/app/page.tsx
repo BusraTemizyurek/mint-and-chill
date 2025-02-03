@@ -5,8 +5,6 @@ import CursorGlow from "../components/cursor-glow";
 import NFTGallery from "../components/nft-gallery";
 import { Background } from "../components/background";
 import { Minter } from "../components/minter";
-import { useEffect } from "react";
-import { baseSepolia } from "viem/chains";
 import { ErrorMessage } from "@/components/error-message";
 import { Header } from "@/components/header";
 import { WalletButton } from "@/components/wallet-button";

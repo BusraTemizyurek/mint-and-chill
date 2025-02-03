@@ -5,21 +5,14 @@ import CursorGlow from "../components/cursor-glow";
 import NFTGallery from "../components/nft-gallery";
 import { Background } from "../components/background";
 import { Minter } from "../components/minter";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { baseSepolia } from "viem/chains";
 import { ErrorMessage } from "@/components/error-message";
 import { Header } from "@/components/header";
 import { WalletButton } from "@/components/wallet-button";
 
 export default function Home() {
-  const { address, chain } = useAccount();
-  const [network, setNetwork] = useState<
-    "loading" | "not-supported" | "supported"
-  >("loading");
-
-  useEffect(() => {
-    setNetwork(chain?.id === baseSepolia.id ? "supported" : "not-supported");
-  }, [chain]);
+  const { address, chain, isConnected } = useAccount();
 
   const scrollToGallery = () => {
     window.scrollTo({ top: 200, behavior: "smooth" });
@@ -43,8 +36,8 @@ export default function Home() {
           <div className="bg-white/5 backdrop-blur-sm p-4 rounded-2xl shadow-xl w-full">
             <Header />
             <WalletButton />
-            {network == "supported" && <Minter />}
-            {network == "not-supported" && (
+            {isConnected && chain && <Minter />}
+            {isConnected && !chain && (
               <ErrorMessage
                 title="Unsupported network"
                 message={`This network is not supported. Please switch to Base Sepolia in your wallet.`}
@@ -53,7 +46,7 @@ export default function Home() {
           </div>
         </div>
         {/* NFT Gallery */}
-        {network == "supported" && address && scrollToGallery() && (
+        {isConnected && chain && address && scrollToGallery() && (
           <>
             <NFTGallery />
             <button
